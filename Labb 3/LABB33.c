@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define WORDLENGTH 5
+#define WORDLENGTH 21
 #define MAX 3
-typedef struct{
+typedef struct {
     char itemName[WORDLENGTH];
     int itemNumber; 
     int stockBalance;
-}Varor;
+} Varor;
 
 Varor createVaror(int itemNumber,char itemName[],int stockBalance){
     Varor a;
@@ -25,7 +25,6 @@ int printRegister(Varor reg[], int NrOfVaror);
 
 
 int main(){
-   
     Varor varRegister[MAX];
     Varor reg[MAX];
     int menu;
@@ -35,10 +34,10 @@ int main(){
         scanf(" %d", &menu);
         switch(menu){
             case 1:
-            regVaror(varRegister, &NrOfVaror);
+             regVaror(varRegister, &NrOfVaror);
             break;
             case 2:
-            printRegister(varRegister, NrOfVaror);
+             printRegister(varRegister, NrOfVaror);
             break;
             case 3:
 
@@ -64,32 +63,39 @@ int main(){
     return 0;
  }      
  
+
 char regVaror(Varor reg[],int *pNrOfVaror){
     char itemName[WORDLENGTH];
     int itemNumber,stockBalance;
-    for(int i = 0 ; i >= (*pNrOfVaror); i++){
+    int check=0;
+        
+    do{
         printf("Ange varunummer (0 for avslut):");
-        scanf("%d%*c",&itemNumber);
+        scanf("%d",&itemNumber);
         if(itemNumber == 0){
             break;
         }
-        else if(itemNumber == reg[i].itemNumber){
-            printf("Ej unikt varunummer!\n");
-            (*pNrOfVaror)++;
+        for(int i = 0; i<=(*pNrOfVaror); i++){
+            if(itemNumber == reg[i].itemNumber){
+                printf("Ej unikt varunummer!\n");
+                regVaror(reg, &*pNrOfVaror);
+                check=1;
             }
-        else{
+        }
+        if(check!=1){
             printf("Ange namn:");
             scanf("%s%*c",itemName);
             printf("Ange saldo:");
             scanf("%d%*c",&stockBalance);
-            reg[*pNrOfVaror] = createVaror(itemNumber,itemName,stockBalance);
+            reg[*pNrOfVaror]= createVaror(itemNumber,itemName,stockBalance);
             (*pNrOfVaror)++;
         }
         
-    }
- }
-        
-  
+    } while (itemNumber != 0);  
+
+}
+
+
 int printRegister(Varor reg[], int NrOfVaror){
     printf("Varunummer           Namn                  Lagersaldo     \n");
     printf("----------------------------------------------------------\n");
