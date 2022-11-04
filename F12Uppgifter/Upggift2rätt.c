@@ -10,7 +10,7 @@ struct car{
 };
 typedef struct car Car;
 
-    Car createCar(char model[],int year, int milage){
+Car createCar(char model[],int year, int milage){
     Car c;
     strcpy(c.model,model);
     c.year=year;
