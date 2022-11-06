@@ -54,10 +54,10 @@ void Replace(Car reg[], int nrOfCars){
     
 }
 
-void print_to_file(char file_name[], Car reg[], int nrOfCars)
+void print_to_file(char fileName[], Car reg[], int nrOfCars)
 {
     FILE *fp;
-    fp = fopen(file_name, "w");
+    fp = fopen(fileName, "w");
 
     if (fp != NULL) {
         for (int i = 0; i < nrOfCars; i++) {
@@ -72,13 +72,13 @@ void print_to_file(char file_name[], Car reg[], int nrOfCars)
     fclose(fp);
 }
 
-void read_from_file(char file_name[], Car reg[], int *pNrOfCars)
+void read_from_file(char fileName[], Car reg[], int *pNrOfCars)
 {
     char model[WORDLENGTH];
     int year, milage;
 
     FILE *fp;
-    fp = fopen(file_name, "r");
+    fp = fopen(fileName, "r");
     
     if (fp != NULL) {
         while (fscanf(fp, "%s %d %d", model, &year, &milage) == 3) {
@@ -94,11 +94,11 @@ int main(){
     Car reg[MAX];
     int menu;
      int nrOfCars = 0;
-    char file_name[FILENAME_MAX];
+    char fileName[FILENAME_MAX];
 
     printf("Vad heter filen du vill anvanda dig av? ");
-    scanf("%s", file_name);
-    read_from_file(file_name, carRegister, &nrOfCars);
+    scanf("%s", fileName);
+    read_from_file(fileName, carRegister, &nrOfCars);
 
     do{
         printf(" (1)Registrera bilar\n (2)Skriv ut alla bilar\n (3)Oka mil\n (4)Avsluta\n");
@@ -116,7 +116,7 @@ int main(){
             break;
             case 4: 
             printf("Exiting program\n");
-            print_to_file(file_name, carRegister, nrOfCars);
+            print_to_file(fileName, carRegister, nrOfCars);
                 return 0;
             default:
                 break;
