@@ -18,14 +18,14 @@ Varor createVaror(int itemNumber,char itemName[],int stockBalance){
 }
 
 
-char regVaror(Varor reg[MAX],int *pNrOfVaror);
+char regVaror(Varor reg[MAX],int NrOfVaror);
 int printRegister(Varor reg[], int NrOfVaror);
+char search(Varor reg[], int NrOfVaror);
 
 
 
 
 int main(){
-    Varor varRegister[MAX];
     Varor reg[MAX];
     int menu;
     int NrOfVaror = 0;
@@ -34,13 +34,13 @@ int main(){
         scanf(" %d", &menu);
         switch(menu){
             case 1:
-             regVaror(varRegister, &NrOfVaror);
+             NrOfVaror = regVaror(reg, NrOfVaror);
             break;
             case 2:
-             printRegister(varRegister, NrOfVaror);
+             printRegister(reg, NrOfVaror);
             break;
             case 3:
-
+            search(reg,NrOfVaror);
             break;
             case 4:
 
@@ -64,21 +64,21 @@ int main(){
  }      
  
 
-char regVaror(Varor reg[],int *pNrOfVaror){
-    char itemName[WORDLENGTH];
-    int itemNumber,stockBalance;
+char regVaror(Varor reg[MAX],int NrOfVaror){
     int check=0;
-        
+    char itemName[WORDLENGTH];
+    int itemNumber, stockBalance;
     do{
         printf("Ange varunummer (0 for avslut):");
-        scanf("%d",&itemNumber);
+        scanf("%d%*c",&itemNumber);
+    
         if(itemNumber == 0){
             break;
-        }
-        for(int i = 0; i<=(*pNrOfVaror); i++){
-            if(itemNumber == reg[i].itemNumber){
+            }
+       for(int i = 0; i < NrOfVaror ; i++){
+           if(itemNumber == reg[i].itemNumber){
                 printf("Ej unikt varunummer!\n");
-                regVaror(reg, &*pNrOfVaror);
+                regVaror(reg, NrOfVaror);
                 check=1;
             }
         }
@@ -87,22 +87,13 @@ char regVaror(Varor reg[],int *pNrOfVaror){
             scanf("%s%*c",itemName);
             printf("Ange saldo:");
             scanf("%d%*c",&stockBalance);
-            reg[*pNrOfVaror]= createVaror(itemNumber,itemName,stockBalance);
-            (*pNrOfVaror)++;
-<<<<<<< Updated upstream:Labb 3/LABB33.c
+            reg[NrOfVaror]= createVaror(itemNumber,itemName,stockBalance);
+            (NrOfVaror)++;
         }
-        
-    } while (itemNumber != 0);  
-=======
-            if(pNrOfVaror == MAX){
-            break;
-    }
-        }
-         while (pNrOfVaror != 0); 
-         
->>>>>>> Stashed changes:Labb 3/Labb3.c
+        } while (NrOfVaror != 0);  
+            return NrOfVaror;
+    } 
 
-}
 
 
 int printRegister(Varor reg[], int NrOfVaror){
@@ -110,6 +101,22 @@ int printRegister(Varor reg[], int NrOfVaror){
     printf("----------------------------------------------------------\n");
     for(int i = 0; i < NrOfVaror; i++){
     printf(" %-14d    %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
+    }
+}
+
+char search(Varor reg[], int NrOfVaror){
+     char itemName[WORDLENGTH];
+    int itemNumber, stockBalance;
+    char chakeName[MAX];
+    while(NrOfVaror != MAX){
+        printf("enter what word you wanna serch");
+        scanf("%s",chakeName);
+    
+  for (int i = 0; i < NrOfVaror; i++){
+    if (strcmp(chakeName, reg[i].itemName) == 0) {
+       printf(" %-14d    %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
+            }
+        }
     }
 }
 

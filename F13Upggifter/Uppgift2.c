@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #define WORDLENGTH 30
-#define MAX 100
+#define MAX 3
 struct car{
     char model[WORDLENGTH];
     int year;
