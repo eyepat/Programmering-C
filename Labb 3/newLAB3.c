@@ -140,7 +140,12 @@ char search(Varor reg[], int NrOfVaror){                                        
             case 0:
             break;
         }
+<<<<<<< HEAD
     }while(menuSearch != 0);  
+=======
+    }while(menuSearch != 0);
+ 
+>>>>>>> 09ec37e9a365020f47cd260c66ffe647118a1fbb
 }
 
 char searchName(Varor reg[], int NrOfVaror){
@@ -220,10 +225,15 @@ int searchStockBalance(Varor reg[], int NrOfVaror){                             
 
 void Replace(Varor reg[], int NrOfVaror){   //klart
     char itemName[WORDLENGTH];
+<<<<<<< HEAD
    
     int searchThis = 0;
     int more;
     int itemNumber, stockBalance, control = 0, control2 = 0, control3 = 0;
+=======
+    int searchThis = 0;
+    int itemNumber, stockBalance ,more;
+>>>>>>> 09ec37e9a365020f47cd260c66ffe647118a1fbb
     do{
         if(control2 == 0){
         printRegister(reg, NrOfVaror);
@@ -235,12 +245,15 @@ void Replace(Varor reg[], int NrOfVaror){   //klart
         if(searchThis == 0){
             break;
             }
+<<<<<<< HEAD
 
             
+=======
+            printf("Varunummer           Namn                  Lagersaldo     \n");
+            printf("----------------------------------------------------------\n");
+>>>>>>> 09ec37e9a365020f47cd260c66ffe647118a1fbb
         for (int i = 0; i != NrOfVaror; i++){
             if(searchThis == reg[i].itemNumber){
-                printf("Varunummer           Namn                  Lagersaldo     \n");
-                printf("----------------------------------------------------------\n");
                 printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
 
                 printf("how much? ");
@@ -256,10 +269,15 @@ void Replace(Varor reg[], int NrOfVaror){   //klart
             if(reg[i].stockBalance < 0){
                 printf("for inte anvanda minus siffra\n");
                 reg[i].stockBalance = 0;
+<<<<<<< HEAD
                 printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
             }
             
            
+=======
+                
+            }
+>>>>>>> 09ec37e9a365020f47cd260c66ffe647118a1fbb
         }
     }while(NrOfVaror != 0); 
  }
@@ -294,13 +312,13 @@ int Sortera(Varor reg[], int NrOfVaror){                                        
       
 void SorteraVNr(Varor reg[], int NrOfVaror){                                          //klart
     int itemNumber;
-    Varor temp;
+    Varor comparison;
     for (int i = 0; i < NrOfVaror; i++) {     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(reg[i].itemNumber > reg[j].itemNumber){    
-               temp = reg[i];    
+               comparison = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= temp;  
+               reg[j]= comparison;  
             }  
         }
     }
@@ -310,13 +328,13 @@ void SorteraVNr(Varor reg[], int NrOfVaror){                                    
 }
 void SorteraVSaldo(Varor reg[], int NrOfVaror){                                               //klart
     int itemNumber;
-    Varor temp;
+    Varor comparison;
     for (int i = 0; i < NrOfVaror; i++) {     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(reg[i].stockBalance > reg[j].stockBalance){    
-               temp = reg[i];    
+               comparison = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= temp;  
+               reg[j]= comparison;  
             }  
         }
     }
@@ -327,13 +345,13 @@ void SorteraVSaldo(Varor reg[], int NrOfVaror){                                 
 
 void SorteraVName(Varor reg[], int NrOfVaror){                                                    //klart
     int itemNumber;
-    Varor temp;
+    Varor comparison;
     for (int i = 0; i < NrOfVaror; i++){     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(strcmp(reg[i].itemName ,reg[j].itemName) > 0){    
-               temp = reg[i];    
+               comparison = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= temp; 
+               reg[j]= comparison; 
             }
         }
     }
@@ -342,6 +360,7 @@ void SorteraVName(Varor reg[], int NrOfVaror){                                  
     printf("------------------------\n");
 }
 
+<<<<<<< HEAD
 int DeleteVaror(Varor reg[], int NrOfVaror){ 
     char itemName[WORDLENGTH];
     int resultatet[MAX];
@@ -365,6 +384,43 @@ int DeleteVaror(Varor reg[], int NrOfVaror){
 }   
            
 void printToFile(char fileName[], Varor reg[], int NrOfVaror){                 //klart
+=======
+
+
+
+   if(NrOfVaror == MAX){
+                return 0;
+            } 
+    }
+
+
+
+
+
+
+
+int DeleteVaror(Varor reg[], int NrOfVaror){
+    char itemName[WORDLENGTH];
+    int resultatet[MAX];
+    int itemNumber, stockBalance, chakeNr = 0, oneTime = 0;
+    int pos;
+        searchVaroNumber(reg,NrOfVaror);
+
+    printf("Enter the location where you wish to delete element\n");
+    scanf("%d", &pos);
+    for ( int i = pos - 1; i < NrOfVaror - 1 ; i++ ) 
+        reg[i] = reg[i+1];        
+        
+        printf("Resultant array is:\n");
+        
+        for(int i = 0 ; i < NrOfVaror - 1 ; i++ )        
+        printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);   
+        return 0;     
+    }    
+    
+   
+void printToFile(char fileName[], Varor reg[], int NrOfVaror){
+>>>>>>> 09ec37e9a365020f47cd260c66ffe647118a1fbb
     FILE *fp;
     fp = fopen(fileName, "w");
 
