@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #define WORDLENGTH 21
 #define MAX 100
-typedef struct {
+typedef struct{
     char itemName[WORDLENGTH];
     int itemNumber; 
     int stockBalance;
@@ -17,27 +18,25 @@ Varor createVaror(int itemNumber,char itemName[],int stockBalance){
     return a;
 }
 
-void printToFile(char fileName[], Varor reg[], int NrOfVaror);
-void readFromFile(char fileName[], Varor reg[], int *NrOfVaror);
-char regVaror(Varor reg[MAX],int NrOfVaror);
-void printRegister(Varor reg[], int NrOfVaror);
-char search(Varor reg[], int NrOfVaror);
-char searchName(Varor reg[], int NrOfVaror);
-int searchVaroNumber(Varor reg[], int NrOfVaror);
-int searchStockBalance(Varor reg[], int NrOfVaror);
-void Replace(Varor reg[], int NrOfVaror);
-int Sortera(Varor reg[], int NrOfVaror);
-void SorteraVNr(Varor reg[], int NrOfVaror);
-void SorteraVSaldo(Varor reg[], int NrOfVaror);
-void SorteraVName(Varor reg[], int NrOfVaror);
-int DeleteVaror(Varor reg[], int NrOfVaror);
+void printToFile(char fileName[], Varor reg[], int NrOfVaror);                  //klart
+void readFromFile(char fileName[], Varor reg[], int *NrOfVaror);                //klart
+char regVaror(Varor reg[MAX],int NrOfVaror);                                    //klart
+void printRegister(Varor reg[], int NrOfVaror);                                 //klart
+char search(Varor reg[], int NrOfVaror,int *goBack);                                        //klart
+char searchName(Varor reg[], int NrOfVaror);                                    //klart
+int searchVaroNumber(Varor reg[], int NrOfVaror,int *goBack);                               //klart
+int searchStockBalance(Varor reg[], int NrOfVaror);                             //klart
+void Replace(Varor reg[], int NrOfVaror,int *goBack);                                       //klart 
+int Sortera(Varor reg[], int NrOfVaror);                                        //klart    
+void SorteraVNr(Varor reg[], int NrOfVaror);                                    //klart
+void SorteraVSaldo(Varor reg[], int NrOfVaror);                                 //klart
+void SorteraVName(Varor reg[], int NrOfVaror);                                  //klart
+int DeleteVaror(Varor reg[], int NrOfVaror,int *goBack);                                    //klart
 
 int main(){
     Varor reg[MAX];
-    int menu;
-    int NrOfVaror = 0;
-    char fileName[FILENAME_MAX];
-
+    int menu ,goBack ,NrOfVaror = 0;
+    char fileName[WORDLENGTH];
     printf("Vad heter filen du vill anvanda dig av? ");
     scanf("%s", fileName);
     readFromFile(fileName, reg, &NrOfVaror);
@@ -54,16 +53,16 @@ int main(){
             printRegister(reg, NrOfVaror);
             break;
             case 3:
-            search(reg,NrOfVaror);
+            search(reg,NrOfVaror,&goBack);
             break;
             case 4:
-            Replace(reg,NrOfVaror);
+            Replace(reg,NrOfVaror,&goBack);
             break;
             case 5:
             Sortera(reg, NrOfVaror);
             break;
             case 6:
-            DeleteVaror(reg,NrOfVaror);
+            NrOfVaror = DeleteVaror(reg,NrOfVaror,&goBack);
             break;
             case 0:
             printf("Exiting program\n");
@@ -78,8 +77,7 @@ int main(){
     return 0;
  }      
  
-
-char regVaror(Varor reg[MAX],int NrOfVaror){
+char regVaror(Varor reg[MAX],int NrOfVaror){                                      //klart
     int check;
     char itemName[WORDLENGTH];
     int itemNumber, stockBalance;
@@ -106,36 +104,33 @@ char regVaror(Varor reg[MAX],int NrOfVaror){
                 (NrOfVaror)++;
             }
             if(NrOfVaror == MAX){
+                printf("Not enough space\n");
                 break;
             }
+            
         } while (NrOfVaror != 0);  
             return NrOfVaror;
-    }
+}
 
-void printRegister(Varor reg[], int NrOfVaror){
+void printRegister(Varor reg[], int NrOfVaror){                                             //klart
     printf("Varunummer           Namn                  Lagersaldo     \n");
     printf("----------------------------------------------------------\n");
     for(int i = 0; i < NrOfVaror; i++){
         printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
-        }
+    }
 }
 
-
-char search(Varor reg[], int NrOfVaror){
+char search(Varor reg[], int NrOfVaror, int *goBack){                                               //klart
     char itemName[WORDLENGTH];
-    int itemNumber, stockBalance;
+    int itemNumber,stockBalance,menuSearch,chakeNr,chakeStock;
     char chakeName[MAX];
-    int menuSearch;
-    int chakeNr;
-    int chakeStock;
-    int resultatet[NrOfVaror];
     
     do{
         printf("1)Sok for VaroNumber\n2)Sok for VaroName\n3)Sok efter VarorSaldo \n0)for avslut ");
          scanf(" %d", &menuSearch);
         switch(menuSearch){
             case 1:
-            chakeNr = searchVaroNumber(reg, NrOfVaror);
+            chakeNr = searchVaroNumber(reg, NrOfVaror,goBack);
             break;
             case 2:
             searchName(reg, NrOfVaror);
@@ -146,62 +141,78 @@ char search(Varor reg[], int NrOfVaror){
             case 0:
             break;
         }
-    }while(menuSearch != 0);
- 
+    }while(menuSearch != 0);  
 }
+
 char searchName(Varor reg[], int NrOfVaror){
     char itemName[WORDLENGTH];
-    int itemNumber, stockBalance;
+    int itemNumber, stockBalance,oneTime = 0 ,check;
     char chakeName[MAX];
-    int oneTime = 0;
+   
     while(NrOfVaror <= MAX){
+        check = 0;
        char *save;
-        printf("enter what word you wanna search (0 for avslut) ");
+        printf("enter what word you wanna search (0 for avslut) ");    //klart
         scanf("%s",chakeName);
-       
+       if(chakeName[0] == '0' && chakeName[1] == '\0'){
+        break;
+       }
         for (int i = 0; i < NrOfVaror; i++){
            save = strstr(reg[i].itemName,chakeName);
            if (save != NULL){
-           
             printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
             }
-            
+            else{
+                check++;
+            } 
         }
-       
+            if(check == NrOfVaror){
+                printf("Not found, Try again\n");
+            }
     }
 }
     
-int searchVaroNumber(Varor reg[], int NrOfVaror){
+int searchVaroNumber(Varor reg[], int NrOfVaror,int *goBack){                                //klart
     char itemName[WORDLENGTH];
-    int resultatet[MAX];
-    int itemNumber, stockBalance, chakeNr = 0, oneTime = 0;
+    int itemNumber, stockBalance, chakeNr = 0, oneTime = 0,check1,check2;
     
-    while(NrOfVaror <= MAX){
+    while(1){
+        check2= 0;
         printf("enter what Varonumber you wanna search (0 for avslut) ");
         scanf("%d",&chakeNr);
         if(chakeNr == 0){
-            break;
+            return 1;
         } 
-        for (int i = 0; i != NrOfVaror; i++){
+        for (int i = 0; i < NrOfVaror; i++){
            if(chakeNr == reg[i].itemNumber){
+            *goBack = i;
             if(oneTime == 0){
                 printf("Varunummer           Namn                  Lagersaldo     \n");
                 printf("----------------------------------------------------------\n");
                 oneTime = 1;
             }
             printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
-            }  
-        }     
-    }    
+            return 0; 
+            } 
+            else{
+                check2++;
+            } 
+        } 
+        if(check2 == NrOfVaror){
+                printf("Not found, Try again\n");
+            }
+    }  
+     
 }
     
 
 
-int searchStockBalance(Varor reg[], int NrOfVaror){
+int searchStockBalance(Varor reg[], int NrOfVaror){                                    //klart
     char itemName[WORDLENGTH];
-    int itemNumber, stockBalance, chakeStock = 0, oneTime = 0;
+    int itemNumber, stockBalance, chakeStock = 0, oneTime = 0,check2;
     while(NrOfVaror <= MAX){
-        printf("enter what Varonumber you wanna search (0 for avslut) ");
+        check2 = 0;
+        printf("enter what Saldonumber you wanna search (0 for avslut) ");
         scanf("%d",&chakeStock);
         if(chakeStock == 0){
             break;
@@ -215,43 +226,66 @@ int searchStockBalance(Varor reg[], int NrOfVaror){
             }
             printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
             }  
+            else{
+                check2++;
+            } 
               
         }
+        if(check2 == NrOfVaror){
+                printf("Not found, Try again\n");
+            }
     }
 }
 
 
-void Replace(Varor reg[], int NrOfVaror){
+void Replace(Varor reg[], int NrOfVaror, int *goBack){    
     char itemName[WORDLENGTH];
+   
     int searchThis = 0;
-    int itemNumber, stockBalance ,more;
+    int more;
+    int itemNumber, stockBalance, ControlSearch = 0, control1,ValueSearch;
     do{
-        printRegister(reg, NrOfVaror);
+        if(ControlSearch == 0){
+    ValueSearch = search(reg,NrOfVaror,goBack);
+        ControlSearch = 1;
+        }
+        if(ControlSearch ==1){
         printf("vilken vara vill du andra saldo pa?(0) to exit ");
         scanf("%03d", &searchThis);
+        }
         if(searchThis == 0){
             break;
             }
-            printf("Varunummer           Namn                  Lagersaldo     \n");
-            printf("----------------------------------------------------------\n");
+
         for (int i = 0; i != NrOfVaror; i++){
             if(searchThis == reg[i].itemNumber){
+                printf("Varunummer           Namn                  Lagersaldo     \n");
+                printf("----------------------------------------------------------\n");
                 printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
-                printf("hur manga? ");
+
+                printf("how much? ");
                 scanf("%d",&more);
-                reg[i].stockBalance += more;
-            }  
+                reg[i].stockBalance += more; 
+                printf("Edit sucseed!\n");
+                if(control1 == 0){
+                    printf("Varunummer           Namn                  Lagersaldo     \n");
+                    printf("----------------------------------------------------------\n");
+                    printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);     
+                    control1 = 1;
+                }                               
+            } 
             if(reg[i].stockBalance < 0){
-                printf("for inte anvanda minus siffra\n");
-                printf("_________________________________________________\n");
+                printf("\nfor inte anvanda minus siffra\n");
                 reg[i].stockBalance = 0;
-                
+                printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);
             }
+            
+           
         }
     }while(NrOfVaror != 0); 
  }
             
-int Sortera(Varor reg[], int NrOfVaror){
+int Sortera(Varor reg[], int NrOfVaror){                                            //klart
     int itemNumber;
     Varor temp;
     int menuSortera;
@@ -279,15 +313,15 @@ int Sortera(Varor reg[], int NrOfVaror){
     }while(kontrol != 1);
 } 
       
-void SorteraVNr(Varor reg[], int NrOfVaror){
+void SorteraVNr(Varor reg[], int NrOfVaror){                                          //klart
     int itemNumber;
-    Varor comparison;
+    Varor temp;
     for (int i = 0; i < NrOfVaror; i++) {     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(reg[i].itemNumber > reg[j].itemNumber){    
-               comparison = reg[i];    
+               temp = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= comparison;  
+               reg[j]= temp;  
             }  
         }
     }
@@ -295,15 +329,15 @@ void SorteraVNr(Varor reg[], int NrOfVaror){
     printf("Sortera succeed\n");
     printf("------------------------\n");
 }
-void SorteraVSaldo(Varor reg[], int NrOfVaror){
+void SorteraVSaldo(Varor reg[], int NrOfVaror){                                               //klart
     int itemNumber;
-    Varor comparison;
+    Varor temp;
     for (int i = 0; i < NrOfVaror; i++) {     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(reg[i].stockBalance > reg[j].stockBalance){    
-               comparison = reg[i];    
+               temp = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= comparison;  
+               reg[j]= temp;  
             }  
         }
     }
@@ -312,15 +346,15 @@ void SorteraVSaldo(Varor reg[], int NrOfVaror){
     printf("------------------------\n");
 }
 
-void SorteraVName(Varor reg[], int NrOfVaror){
+void SorteraVName(Varor reg[], int NrOfVaror){                                                    //klart
     int itemNumber;
-    Varor comparison;
+    Varor temp;
     for (int i = 0; i < NrOfVaror; i++){     
         for (int j = i+1; j < NrOfVaror; j++) {     
            if(strcmp(reg[i].itemName ,reg[j].itemName) > 0){    
-               comparison = reg[i];    
+               temp = reg[i];    
                reg[i] = reg[j];    
-               reg[j]= comparison; 
+               reg[j]= temp; 
             }
         }
     }
@@ -329,27 +363,46 @@ void SorteraVName(Varor reg[], int NrOfVaror){
     printf("------------------------\n");
 }
 
-int DeleteVaror(Varor reg[], int NrOfVaror){
+int DeleteVaror(Varor reg[], int NrOfVaror,int *goBack){ 
     char itemName[WORDLENGTH];
     int resultatet[MAX];
-    int itemNumber, stockBalance, chakeNr = 0, oneTime = 0;
-    int pos;
-        searchVaroNumber(reg,NrOfVaror);
-
-    printf("Enter the location where you wish to delete element\n");
-    scanf("%d", &pos);
-    for ( int i = pos - 1; i < NrOfVaror - 1 ; i++ ) 
-        reg[i] = reg[i+1];        
-        
-        printf("Resultant array is:\n");
-        
-        for(int i = 0 ; i < NrOfVaror - 1 ; i++ )        
-        printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);   
-        return 0;     
-    }    
+    int itemNumber ,stockBalance ,deleteThis, check;        
     
-   
-void printToFile(char fileName[], Varor reg[], int NrOfVaror){
+    search(reg,NrOfVaror,goBack);
+        
+    do{
+        check = 0;
+       
+        printf("what u wanna delete");
+        scanf("%d",&deleteThis);
+        for (int i = 0; i < NrOfVaror; i++){
+            if (deleteThis == reg[i].itemNumber){
+                deleteThis = i;
+                check = 1;
+            }
+        }
+        if(check == 0){
+            printf("Not found! try again\n");
+        }
+        if (check == 1)
+        {
+            for (int i = deleteThis; i < NrOfVaror; i++){
+                reg[i] = reg[i+1];        
+                }
+                NrOfVaror--;
+                printf("Delete sucssed!\n");
+            
+            for(int i = 0 ; i < NrOfVaror; i++){       
+                printf(" %03d                %-25s    %-14d\n",reg[i].itemNumber, reg[i].itemName, reg[i].stockBalance);  
+            }
+            return NrOfVaror;       
+        }
+    }while(NrOfVaror != 0);
+    
+}    
+
+           
+void printToFile(char fileName[], Varor reg[], int NrOfVaror){                 //klart
     FILE *fp;
     fp = fopen(fileName, "w");
 
@@ -366,7 +419,7 @@ void printToFile(char fileName[], Varor reg[], int NrOfVaror){
     fclose(fp);
 }
 
-void readFromFile(char fileName[], Varor reg[], int *NrOfVaror){
+void readFromFile(char fileName[], Varor reg[], int *NrOfVaror){                       //klart
     char itemName[WORDLENGTH];
     int itemNumber, stockBalance;
 
