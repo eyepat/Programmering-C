@@ -329,6 +329,20 @@ void SorteraVName(Varor reg[], int NrOfVaror){
     printf("------------------------\n");
 }
 
+
+
+
+   if(NrOfVaror == MAX){
+                return 0;
+            } 
+    }
+
+
+
+
+
+
+
 int DeleteVaror(Varor reg[], int NrOfVaror){
     char itemName[WORDLENGTH];
     int resultatet[MAX];
